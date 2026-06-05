@@ -1,0 +1,21 @@
+-- Run in XAMPP phpMyAdmin or MySQL CLI
+CREATE DATABASE IF NOT EXISTS fileshare_lan CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE fileshare_lan;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS stored_files (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  owner_id INT NOT NULL,
+  original_name VARCHAR(255) NOT NULL,
+  storage_name VARCHAR(255) NOT NULL UNIQUE,
+  content_type VARCHAR(100),
+  size_bytes BIGINT NOT NULL,
+  uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_owner FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
+);
